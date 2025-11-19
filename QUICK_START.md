@@ -29,8 +29,12 @@ Your e-commerce platform is **fully functional** and ready for customers.
 ## 🔐 Admin Access
 
 **Admin Credentials**:
-- **Email**: `admin@mckfoods.com`
-- **Password**: `admin123456`
+- **Email**: `mangocitykitchen@mckfoods.com`
+- **Password**: `paramscottage`
+
+**OR** (Username format):
+- **Username**: `mangocitykitchen`
+- **Password**: `paramscottage`
 
 **Admin Panel**: Navigate to `/admin` after logging in
 

@@ -4,43 +4,70 @@
 
 ### Admin Account
 ```
-Email:    mangocitykitchen
+Email:    mangocitykitchen@mckfoods.com
 Password: paramscottage
 ```
 
-## 📝 First Time Setup
+**OR** (Username format also works):
+```
+Username: mangocitykitchen
+Password: paramscottage
+```
+
+## 📝 How to Login
 
 1. **Open your website**
-2. **Click "Register"** (not Login)
+2. **Click "Login"** (or go to `/login`)
 3. **Enter the credentials above**
-4. **Complete registration**
-5. **You are now an admin!**
-
-## ⚠️ Important Notes
-
-- **First User Only**: These credentials must be used for the FIRST registration
-- **Auto-Admin**: The first registered user automatically becomes admin
-- **Subsequent Users**: All other users will be regular customers
-- **Promote Others**: You can promote other users to admin through the admin panel
+4. **Click "Sign In"**
+5. **You're now logged in as admin!**
 
 ## 🎯 Quick Access
 
-After registration:
-1. **Login** with the same credentials
-2. **Click "Admin"** button in the header
-3. **Access all admin features**:
-   - Dashboard
-   - Products Management
-   - Orders Management
-   - Users Management
+After login:
+1. **Admin Panel**: Navigate to `/admin` or click "Admin" in the header
+2. **Access all admin features**:
+   - Dashboard overview
+   - Products Management (Add, Edit, Delete)
+   - Orders Management (View, Update status)
+   - Image Upload (Drag-and-drop)
 
-## 🔒 Security
+## ⚠️ Important Notes
 
-- Keep these credentials secure
-- Don't share with unauthorized users
-- Change password after first login (optional)
-- You can create additional admin accounts through the admin panel
+- **Pre-created Admin**: This admin account is already created in the database
+- **Ready to Use**: No registration needed, just login directly
+- **Full Access**: Has complete admin privileges
+- **Secure**: Password is securely hashed in the database
+
+## 🔒 Security Best Practices
+
+- ✅ Keep these credentials secure
+- ✅ Don't share with unauthorized users
+- ✅ Consider changing password after first login
+- ✅ You can create additional admin accounts if needed
+- ✅ Regular users can register normally and won't have admin access
+
+## 🚀 Admin Features
+
+### Product Management
+- Add new products with images
+- Edit existing products
+- Delete products
+- Manage inventory
+- Set prices and descriptions
+
+### Order Management
+- View all customer orders
+- Update order status
+- Track order details
+- Customer information
+
+### Image Upload
+- Drag-and-drop interface
+- Automatic upload to Supabase Storage
+- Image preview
+- Multiple image support
 
 ---
 
-**Ready to start?** Register now with these credentials to become the admin!
+**Ready to start?** Login now with these credentials to access the admin panel!
