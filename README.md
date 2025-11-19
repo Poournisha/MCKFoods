@@ -55,6 +55,19 @@ A fully functional e-commerce website for MCK Foods, specializing in premium Rag
    - Add your Razorpay credentials to enable payments
    - See SETUP_GUIDE.md for details
 
+4. **Enable Google Sign-In** (Optional):
+   - Enable Google provider in Supabase Dashboard
+   - See GOOGLE_QUICK_FIX.md for 2-minute setup
+   - See GOOGLE_AUTH_SETUP.md for full configuration
+
+## ⚠️ Common Issues
+
+### "Unsupported provider: provider is not enabled"
+This means Google OAuth isn't enabled yet. Quick fix:
+1. Go to Supabase Dashboard → Authentication → Providers
+2. Enable Google provider
+3. See **GOOGLE_QUICK_FIX.md** for detailed steps
+
 ## Project Info
 
 ## Project Directory

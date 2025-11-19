@@ -63,9 +63,16 @@ export default function Login() {
 
       if (error) {
         console.error("Google login failed:", error);
+        
+        // Provide helpful error message for common issues
+        let errorMessage = error.message;
+        if (error.message.includes("provider is not enabled")) {
+          errorMessage = "Google sign-in is not configured yet. Please enable Google provider in Supabase Dashboard (Authentication → Providers → Google). See GOOGLE_QUICK_FIX.md for instructions.";
+        }
+        
         toast({
-          title: "Login failed",
-          description: error.message,
+          title: "Google Sign-In Error",
+          description: errorMessage,
           variant: "destructive",
         });
         setLoading(false);

@@ -86,9 +86,16 @@ export default function Register() {
 
       if (error) {
         console.error("Google sign-up failed:", error);
+        
+        // Provide helpful error message for common issues
+        let errorMessage = error.message;
+        if (error.message.includes("provider is not enabled")) {
+          errorMessage = "Google sign-in is not configured yet. Please enable Google provider in Supabase Dashboard (Authentication → Providers → Google). See GOOGLE_QUICK_FIX.md for instructions.";
+        }
+        
         toast({
-          title: "Sign-up failed",
-          description: error.message,
+          title: "Google Sign-Up Error",
+          description: errorMessage,
           variant: "destructive",
         });
         setLoading(false);
