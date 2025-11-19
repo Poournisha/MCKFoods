@@ -1,4 +1,58 @@
-# Welcome to Your Miaoda Project
+# MCK Foods E-commerce Platform
+
+## 🏪 Project Overview
+
+A fully functional e-commerce website for MCK Foods, specializing in premium Ragi health food products with integrated Razorpay payment processing and comprehensive admin management.
+
+## 🔐 Admin Credentials
+
+**First Time Setup - Register with these credentials**:
+- **Email**: `mangocitykitchen`
+- **Password**: `paramscottage`
+
+**Important**: Use these credentials when registering for the first time. The first registered user automatically becomes admin.
+
+## 📚 Documentation
+
+- **CREDENTIALS.md** - Quick reference for admin login
+- **SETUP_GUIDE.md** - Complete setup and configuration guide
+- **ADMIN_SETUP.md** - Detailed admin account setup instructions
+- **IMAGE_UPLOAD_GUIDE.md** - Image upload feature documentation
+- **CHANGES.md** - Complete changelog of all features
+
+## ✨ Key Features
+
+### For Customers
+- Browse 7 health food products across 3 categories
+- Search and filter products
+- Shopping cart with quantity management
+- Secure Razorpay payment (UPI, Cards, NetBanking, Wallets)
+- Order history and tracking
+- User authentication
+
+### For Admins
+- Dashboard with analytics
+- Product management (add, edit, delete)
+- **Drag-and-drop image upload**
+- Multi-image product gallery
+- Order management
+- User management
+
+## 🚀 Quick Start
+
+1. **Register as Admin**:
+   - Go to Register page
+   - Email: `mangocitykitchen`
+   - Password: `paramscottage`
+   - Complete registration
+
+2. **Access Admin Panel**:
+   - Click "Admin" button in header
+   - Manage products, orders, and users
+
+3. **Configure Razorpay** (Optional):
+   - Add your Razorpay credentials to enable payments
+   - See SETUP_GUIDE.md for details
 
 ## Project Info
 
