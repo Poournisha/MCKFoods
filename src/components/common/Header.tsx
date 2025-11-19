@@ -13,8 +13,9 @@ export default function Header() {
     <header className="bg-card border-b sticky top-0 z-50">
       <nav className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          <Link to="/" className="flex items-center gap-2">
-            <span className="text-2xl font-bold text-primary">Ragi Products</span>
+          <Link to="/" className="flex items-center gap-3">
+            <img src="/mck-logo.jpg" alt="MCK Foods" className="h-10 w-auto" />
+            <span className="text-2xl font-bold text-primary">MCK Foods</span>
           </Link>
 
           <div className="flex items-center gap-4">

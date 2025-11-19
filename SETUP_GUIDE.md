@@ -1,8 +1,8 @@
-# Ragi Products E-commerce Website - Setup Guide
+# MCK Foods E-commerce Website - Setup Guide
 
 ## 🎉 Your E-commerce Platform is Ready!
 
-This is a fully functional e-commerce website for selling Ragi health food products with integrated Razorpay payment processing (perfect for India) and admin management.
+This is a fully functional e-commerce website for MCK Foods, selling premium Ragi health food products with integrated Razorpay payment processing (perfect for India) and comprehensive admin management.
 
 ## 📋 What's Included
 
@@ -13,10 +13,13 @@ This is a fully functional e-commerce website for selling Ragi health food produ
 - **Secure Checkout**: Integrated Razorpay payment processing (UPI, Cards, NetBanking, Wallets)
 - **Order History**: Track all your orders
 - **User Authentication**: Register and login with email/password
+- **Product Gallery**: View multiple images for each product
 
 ### Admin Features
 - **Dashboard**: Overview of products, orders, users, and revenue
-- **Product Management**: Add, edit, and delete products with images
+- **Product Management**: Add, edit, and delete products
+- **Multi-Image Upload**: Add unlimited images per product with primary image selection
+- **Image Gallery Management**: Reorder, set primary, and delete product images
 - **Order Management**: View and track all customer orders
 - **User Management**: Manage user accounts and roles
 
@@ -95,9 +98,36 @@ The following products are pre-loaded:
 
 1. **Login**: Use your admin account credentials
 2. **Access Admin Panel**: Click "Admin" button in the header
-3. **Manage Products**: Add new products, edit existing ones, or remove products
+3. **Manage Products**: 
+   - Add new products with primary image
+   - Edit existing products
+   - Click "Images" button to manage product gallery
+   - Add multiple images per product
+   - Set primary image for product display
+   - Delete unwanted images
 4. **View Orders**: Monitor all customer orders and their status
 5. **Manage Users**: View all users and change their roles
+
+## 🖼️ Multi-Image Product Management
+
+The admin panel includes a powerful image management system:
+
+### Adding Images to Products
+
+1. **Create Product**: First create a product with a primary image URL
+2. **Manage Images**: Click the "Images" button on any product card
+3. **Add Multiple Images**: 
+   - Enter image URLs one by one
+   - Click "Add" to upload each image
+   - First image is automatically set as primary
+4. **Set Primary Image**: Click the star icon on any image to make it primary
+5. **Delete Images**: Click the X icon to remove unwanted images
+
+### Image Display
+
+- **Primary Image**: Shows on product cards and listings
+- **Gallery**: All images available in product detail view
+- **Order**: Images are displayed in the order they were added
 
 ## 🔐 Security Features
 

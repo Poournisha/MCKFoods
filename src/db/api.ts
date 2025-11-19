@@ -199,6 +199,71 @@ export const api = {
     if (error) throw error;
   },
 
+  async getProductImages(productId: string) {
+    const { data, error } = await supabase
+      .from("product_images")
+      .select("*")
+      .eq("product_id", productId)
+      .order("display_order", { ascending: true });
+
+    if (error) throw error;
+    return Array.isArray(data) ? data : [];
+  },
+
+  async addProductImage(productId: string, imageUrl: string, isPrimary: boolean = false, displayOrder: number = 0) {
+    const { data, error } = await supabase
+      .from("product_images")
+      .insert({
+        product_id: productId,
+        image_url: imageUrl,
+        is_primary: isPrimary,
+        display_order: displayOrder,
+      })
+      .select()
+      .maybeSingle();
+
+    if (error) throw error;
+    return data;
+  },
+
+  async updateProductImage(imageId: string, updates: { image_url?: string; is_primary?: boolean; display_order?: number }) {
+    const { data, error } = await supabase
+      .from("product_images")
+      .update(updates)
+      .eq("id", imageId)
+      .select()
+      .maybeSingle();
+
+    if (error) throw error;
+    return data;
+  },
+
+  async deleteProductImage(imageId: string) {
+    const { error } = await supabase
+      .from("product_images")
+      .delete()
+      .eq("id", imageId);
+
+    if (error) throw error;
+  },
+
+  async setPrimaryImage(productId: string, imageId: string) {
+    await supabase
+      .from("product_images")
+      .update({ is_primary: false })
+      .eq("product_id", productId);
+
+    const { data, error } = await supabase
+      .from("product_images")
+      .update({ is_primary: true })
+      .eq("id", imageId)
+      .select()
+      .maybeSingle();
+
+    if (error) throw error;
+    return data;
+  },
+
   async createCheckoutSession(items: OrderItem[], customerInfo?: { name?: string; phone?: string; address?: string }) {
     const { data: { session } } = await supabase.auth.getSession();
     

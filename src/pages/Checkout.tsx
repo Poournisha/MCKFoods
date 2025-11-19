@@ -73,7 +73,7 @@ export default function Checkout() {
           key: response.keyId,
           amount: response.amount,
           currency: response.currency,
-          name: "Ragi Products",
+          name: "MCK Foods",
           description: "Order Payment",
           order_id: response.orderId,
           handler: async function (razorpayResponse: any) {

@@ -18,6 +18,15 @@ export interface Category {
   created_at: string;
 }
 
+export interface ProductImage {
+  id: string;
+  product_id: string;
+  image_url: string;
+  display_order: number;
+  is_primary: boolean;
+  created_at: string;
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -30,6 +39,10 @@ export interface Product {
   is_active: boolean;
   created_at: string;
   updated_at: string;
+}
+
+export interface ProductWithImages extends Product {
+  images?: ProductImage[];
 }
 
 export interface OrderItem {
