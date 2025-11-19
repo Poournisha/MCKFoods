@@ -1,20 +1,22 @@
 # Admin Account Setup - MCK Foods
 
-## 🔐 No Default Admin Credentials
+## 🔐 Admin Credentials
 
-**Important**: This system does NOT have pre-configured admin credentials for security reasons.
+**Your Admin Account Details**:
+- **Email**: mangocitykitchen
+- **Password**: paramscottage
 
 ## 🎯 How to Create Your Admin Account
 
-The system uses an **automatic admin assignment** feature:
+The system uses an **automatic admin assignment** feature where the first registered user becomes admin.
 
-### The First Registered User Becomes Admin
+### Register Your Admin Account
 
 1. **Visit the Website**: Open your MCK Foods e-commerce website
 2. **Go to Register Page**: Click "Register" or "Sign Up"
 3. **Create Your Account**:
-   - Enter your email address
-   - Create a strong password
+   - **Email**: `mangocitykitchen`
+   - **Password**: `paramscottage`
    - Fill in any required information
 4. **Complete Registration**: Submit the form
 5. **Automatic Admin Role**: You are now an admin!
@@ -54,22 +56,22 @@ After you've created your admin account:
 - Include special characters
 - Example: `MCKfoods@2025!`
 
-## 📝 Example Registration Process
+## 📝 Registration Process
 
 ```
 Step 1: Navigate to Register Page
 URL: https://your-website.com/register
 
 Step 2: Fill in the form
-Email: admin@mckfoods.com
-Password: YourSecurePassword123!
-Confirm Password: YourSecurePassword123!
+Email: mangocitykitchen
+Password: paramscottage
+Confirm Password: paramscottage
 
 Step 3: Click "Register"
 
 Step 4: Login with your credentials
-Email: admin@mckfoods.com
-Password: YourSecurePassword123!
+Email: mangocitykitchen
+Password: paramscottage
 
 Step 5: Access Admin Panel
 Click the "Admin" button in the header
@@ -108,11 +110,17 @@ Click the "Admin" button in the header
 
 - [ ] Open the website
 - [ ] Click "Register"
-- [ ] Create your admin account (first user)
+- [ ] Enter email: `mangocitykitchen`
+- [ ] Enter password: `paramscottage`
+- [ ] Complete registration
 - [ ] Login with your credentials
 - [ ] Click "Admin" button in header
 - [ ] Start managing your store!
 
 ---
 
-**Remember**: Keep your admin credentials secure and never share them publicly!
+**Your Admin Credentials**:
+- Email: `mangocitykitchen`
+- Password: `paramscottage`
+
+**Remember**: Keep your admin credentials secure!

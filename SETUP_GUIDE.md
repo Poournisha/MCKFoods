@@ -47,12 +47,21 @@ To enable payment processing, you need to add your Razorpay credentials:
 
 ### 2. First Admin Account
 
-The system automatically makes the **first registered user** an admin. To set up your admin account:
+The system automatically makes the **first registered user** an admin.
 
+**Your Admin Credentials**:
+- **Email**: `mangocitykitchen`
+- **Password**: `paramscottage`
+
+**Setup Steps**:
 1. Go to the Register page
-2. Create your account with email and password
-3. You'll automatically have admin privileges
-4. Access the admin panel from the header menu
+2. Enter email: `mangocitykitchen`
+3. Enter password: `paramscottage`
+4. Complete registration
+5. You'll automatically have admin privileges
+6. Access the admin panel from the header menu
+
+**Important**: Register with these credentials as the first user to become admin.
 
 ## 🗄️ Database Information
 
