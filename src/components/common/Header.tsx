@@ -1,51 +1,63 @@
-import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import routes from "../../routes";
+import { Link } from "react-router-dom";
+import { useAuth } from "@/components/auth/AuthProvider";
+import { useCart } from "@/contexts/CartContext";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { ShoppingCart, User, LogOut, LayoutDashboard } from "lucide-react";
 
-const Header: React.FC = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const location = useLocation();
-  const navigation = routes.filter((route) => route.visible !== false);
+export default function Header() {
+  const { user, profile, signOut } = useAuth();
+  const { cartCount } = useCart();
 
   return (
-    <header className="bg-white shadow-md sticky top-0 z-10">
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex items-center">
-            <Link to="/" className="flex-shrink-0 flex items-center">
-              {/* Please replace with your website logo */}
-              <img
-                className="h-8 w-auto"
-                src={`https://miaoda-site-img.cdn.bcebos.com/placeholder/code_logo_default.png`}
-                alt="Website logo"
-              />
-              {/* Please replace with your website name */}
-              <span className="ml-2 text-xl font-bold text-blue-600">
-                Website Name
-              </span>
-            </Link>
-          </div>
+    <header className="bg-card border-b sticky top-0 z-50">
+      <nav className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
+          <Link to="/" className="flex items-center gap-2">
+            <span className="text-2xl font-bold text-primary">Ragi Products</span>
+          </Link>
 
-          {/* When there's only one page, you can remove the entire navigation section */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navigation.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`px-3 py-2 text-base font-medium rounded-md ${
-                  location.pathname === item.path
-                    ? "text-blue-600 bg-blue-50"
-                    : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-                } transition duration-300`}
-              >
-                {item.name}
+          <div className="flex items-center gap-4">
+            <Button asChild variant="ghost" size="icon" className="relative">
+              <Link to="/cart">
+                <ShoppingCart className="h-5 w-5" />
+                {cartCount > 0 && (
+                  <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs">
+                    {cartCount}
+                  </Badge>
+                )}
               </Link>
-            ))}
+            </Button>
+
+            {user ? (
+              <>
+                {profile?.role === "admin" && (
+                  <Button asChild variant="outline">
+                    <Link to="/admin">
+                      <LayoutDashboard className="h-4 w-4 mr-2" />
+                      Admin
+                    </Link>
+                  </Button>
+                )}
+                <Button asChild variant="outline">
+                  <Link to="/orders">
+                    <User className="h-4 w-4 mr-2" />
+                    My Orders
+                  </Link>
+                </Button>
+                <Button variant="ghost" onClick={signOut}>
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <Button asChild>
+                <Link to="/login">Login</Link>
+              </Button>
+            )}
           </div>
         </div>
       </nav>
     </header>
   );
-};
-
-export default Header;
+}
