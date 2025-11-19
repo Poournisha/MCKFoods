@@ -17,6 +17,7 @@ A fully functional e-commerce website for MCK Foods, specializing in premium Rag
 - **CREDENTIALS.md** - Quick reference for admin login
 - **SETUP_GUIDE.md** - Complete setup and configuration guide
 - **ADMIN_SETUP.md** - Detailed admin account setup instructions
+- **GOOGLE_AUTH_SETUP.md** - Google OAuth integration guide
 - **IMAGE_UPLOAD_GUIDE.md** - Image upload feature documentation
 - **CHANGES.md** - Complete changelog of all features
 
@@ -28,7 +29,7 @@ A fully functional e-commerce website for MCK Foods, specializing in premium Rag
 - Shopping cart with quantity management
 - Secure Razorpay payment (UPI, Cards, NetBanking, Wallets)
 - Order history and tracking
-- User authentication
+- User authentication (Email/Password or Google)
 
 ### For Admins
 - Dashboard with analytics

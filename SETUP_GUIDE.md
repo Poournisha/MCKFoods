@@ -63,6 +63,21 @@ The system automatically makes the **first registered user** an admin.
 
 **Important**: Register with these credentials as the first user to become admin.
 
+### 3. Google Sign-In (Optional)
+
+Enable Google OAuth for easier user registration and login:
+
+1. **Follow the setup guide**: See `GOOGLE_AUTH_SETUP.md` for detailed instructions
+2. **Configure Google Cloud Console**: Create OAuth credentials
+3. **Enable in Supabase**: Add Google as an authentication provider
+4. **Test**: Users can sign up/login with their Google accounts
+
+**Benefits**:
+- One-click registration and login
+- No password to remember
+- Secure authentication via Google
+- First Google user also gets admin privileges
+
 ## 🗄️ Database Information
 
 Your database is already set up with:

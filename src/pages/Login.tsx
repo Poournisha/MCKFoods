@@ -50,25 +50,25 @@ export default function Login() {
   const handleGoogleLogin = async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase.auth.signInWithSSO({
-        domain: 'miaoda-gg.com',
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
         options: {
-          redirectTo: window.location.origin
+          redirectTo: `${window.location.origin}/`,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
         },
       });
 
       if (error) {
-        console.error("SSO login failed:", error);
+        console.error("Google login failed:", error);
         toast({
           title: "Login failed",
           description: error.message,
           variant: "destructive",
         });
-        return;
-      }
-
-      if (data?.url) {
-        window.open(data.url, '_self');
+        setLoading(false);
       }
     } catch (error: any) {
       toast({
@@ -76,7 +76,6 @@ export default function Login() {
         description: error.message,
         variant: "destructive",
       });
-    } finally {
       setLoading(false);
     }
   };

@@ -1,5 +1,23 @@
 # Recent Changes - MCK Foods E-commerce Platform
 
+## 🔐 Authentication Updates (Latest)
+
+### Google OAuth Integration
+- ✅ Added Google Sign-In to Login page
+- ✅ Added Google Sign-Up to Register page
+- ✅ Implemented OAuth flow with proper redirect handling
+- ✅ First Google user automatically gets admin privileges
+- ✅ Created comprehensive setup guide: `GOOGLE_AUTH_SETUP.md`
+- ✅ Updated documentation with Google OAuth instructions
+
+### Admin Credentials Documentation
+- ✅ Documented admin credentials in multiple files
+- ✅ Email: `mangocitykitchen`
+- ✅ Password: `paramscottage`
+- ✅ Created `CREDENTIALS.md` for quick reference
+- ✅ Updated `ADMIN_SETUP.md` with credentials
+- ✅ Updated `SETUP_GUIDE.md` with credentials
+
 ## 🎨 Branding Updates
 
 ### Logo Integration
