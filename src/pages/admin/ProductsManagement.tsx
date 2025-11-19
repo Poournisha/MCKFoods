@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, Edit, Trash2, Loader2, X, Star, Image as ImageIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { ImageUpload } from "@/components/ui/ImageUpload";
 
 export default function ProductsManagement() {
   const { profile } = useAuth();
@@ -22,7 +23,7 @@ export default function ProductsManagement() {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [productImages, setProductImages] = useState<ProductImage[]>([]);
   const [imageDialogOpen, setImageDialogOpen] = useState(false);
-  const [newImageUrl, setNewImageUrl] = useState("");
+  const [uploadingImage, setUploadingImage] = useState(false);
   const { toast } = useToast();
 
   const [formData, setFormData] = useState({
@@ -150,22 +151,25 @@ export default function ProductsManagement() {
     setImageDialogOpen(true);
   };
 
-  const handleAddImage = async () => {
-    if (!editingProduct || !newImageUrl.trim()) {
+  const handleAddImage = async (file: File) => {
+    if (!editingProduct) {
       toast({
         title: "Error",
-        description: "Please enter an image URL",
+        description: "No product selected",
         variant: "destructive",
       });
       return;
     }
 
     try {
+      setUploadingImage(true);
+      const imageUrl = await api.uploadProductImage(file);
+      
       const displayOrder = productImages.length;
       const isPrimary = productImages.length === 0;
-      await api.addProductImage(editingProduct.id, newImageUrl, isPrimary, displayOrder);
-      toast({ title: "Image added successfully" });
-      setNewImageUrl("");
+      await api.addProductImage(editingProduct.id, imageUrl, isPrimary, displayOrder);
+      
+      toast({ title: "Image uploaded successfully" });
       await loadProductImages(editingProduct.id);
     } catch (error: any) {
       toast({
@@ -173,6 +177,8 @@ export default function ProductsManagement() {
         description: error.message,
         variant: "destructive",
       });
+    } finally {
+      setUploadingImage(false);
     }
   };
 
@@ -411,18 +417,8 @@ export default function ProductsManagement() {
 
           <div className="space-y-6">
             <div className="space-y-2">
-              <Label>Add New Image</Label>
-              <div className="flex gap-2">
-                <Input
-                  value={newImageUrl}
-                  onChange={(e) => setNewImageUrl(e.target.value)}
-                  placeholder="Enter image URL"
-                />
-                <Button onClick={handleAddImage}>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add
-                </Button>
-              </div>
+              <Label>Upload New Image</Label>
+              <ImageUpload onUpload={handleAddImage} />
             </div>
 
             <div>

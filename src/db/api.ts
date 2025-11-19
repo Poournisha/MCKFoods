@@ -308,4 +308,40 @@ export const api = {
 
     return response.data;
   },
+
+  async uploadProductImage(file: File): Promise<string> {
+    const fileExt = file.name.split(".").pop();
+    const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+    const filePath = `products/${fileName}`;
+
+    const { data, error } = await supabase.storage
+      .from("app-7ntoux6y51c1_product_images")
+      .upload(filePath, file, {
+        cacheControl: "3600",
+        upsert: false,
+      });
+
+    if (error) throw error;
+
+    const { data: { publicUrl } } = supabase.storage
+      .from("app-7ntoux6y51c1_product_images")
+      .getPublicUrl(data.path);
+
+    return publicUrl;
+  },
+
+  async deleteProductImageFile(imageUrl: string) {
+    const urlParts = imageUrl.split("/");
+    const bucketIndex = urlParts.findIndex(part => part === "app-7ntoux6y51c1_product_images");
+    
+    if (bucketIndex === -1) return;
+
+    const filePath = urlParts.slice(bucketIndex + 1).join("/");
+
+    const { error } = await supabase.storage
+      .from("app-7ntoux6y51c1_product_images")
+      .remove([filePath]);
+
+    if (error) throw error;
+  },
 };

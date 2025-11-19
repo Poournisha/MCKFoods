@@ -45,23 +45,44 @@
 - ✅ Implemented Row Level Security (RLS) policies
 - ✅ Public read access, admin-only write access
 
+### Supabase Storage Integration
+- ✅ Created storage bucket: `app-7ntoux6y51c1_product_images`
+- ✅ Configured bucket settings:
+  - Public access enabled
+  - File size limit: 1MB
+  - Allowed types: JPG, JPEG, PNG, WEBP
+- ✅ Implemented storage policies:
+  - Public read access for all images
+  - Admin-only upload/delete access
+
 ### API Enhancements
 - ✅ `getProductImages(productId)` - Fetch all images for a product
 - ✅ `addProductImage(productId, imageUrl, isPrimary, displayOrder)` - Add new image
 - ✅ `updateProductImage(imageId, updates)` - Update image properties
 - ✅ `deleteProductImage(imageId)` - Remove image
 - ✅ `setPrimaryImage(productId, imageId)` - Set primary image
+- ✅ `uploadProductImage(file)` - Upload image file to Supabase Storage
+- ✅ `deleteProductImageFile(imageUrl)` - Delete image file from storage
+
+### UI Components
+- ✅ Created `ImageUpload` component with:
+  - Drag-and-drop functionality
+  - Click-to-upload support
+  - File validation (type, size, filename)
+  - Upload progress indicator
+  - Error handling and display
+  - Chinese character filename detection
 
 ### Admin Panel Features
 - ✅ Enhanced ProductsManagement component with:
   - "Images" button on each product card
   - Image management dialog
-  - Add multiple images via URL input
+  - Drag-and-drop image upload
   - Visual image gallery with thumbnails
   - Set primary image (star icon)
   - Delete images (X icon)
   - Automatic primary image assignment for first image
-  - Display order management
+  - Real-time upload feedback
 
 ### Type Definitions
 - ✅ Added `ProductImage` interface
@@ -82,6 +103,7 @@
 ### Migration Files Created
 1. `02_add_razorpay_fields.sql` - Razorpay payment integration
 2. `03_add_product_images_table.sql` - Multi-image support
+3. `04_create_product_images_bucket.sql` - Supabase Storage bucket configuration
 
 ## 🔧 Configuration Required
 
@@ -106,6 +128,7 @@
 
 ### For Admins
 - Complete product management
+- Drag-and-drop image upload
 - Unlimited images per product
 - Easy image gallery management
 - Order and user management
@@ -116,7 +139,9 @@
 All features are fully implemented and tested:
 - ✅ Logo integration complete
 - ✅ Razorpay payment system ready
+- ✅ Drag-and-drop image upload functional
 - ✅ Multi-image management functional
+- ✅ Supabase Storage configured
 - ✅ Database schema deployed
 - ✅ Edge Functions deployed
 - ✅ Frontend updated

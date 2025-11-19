@@ -110,24 +110,33 @@ The following products are pre-loaded:
 
 ## 🖼️ Multi-Image Product Management
 
-The admin panel includes a powerful image management system:
+The admin panel includes a powerful image management system with drag-and-drop upload:
 
 ### Adding Images to Products
 
-1. **Create Product**: First create a product with a primary image URL
+1. **Create Product**: First create a product (image is optional at this stage)
 2. **Manage Images**: Click the "Images" button on any product card
-3. **Add Multiple Images**: 
-   - Enter image URLs one by one
-   - Click "Add" to upload each image
+3. **Upload Images**: 
+   - **Drag and Drop**: Drag image files directly into the upload area
+   - **Click to Upload**: Click the upload area to select files from your computer
+   - Supported formats: JPG, PNG, WEBP
+   - Maximum file size: 1MB per image
    - First image is automatically set as primary
 4. **Set Primary Image**: Click the star icon on any image to make it primary
 5. **Delete Images**: Click the X icon to remove unwanted images
+
+### Image Requirements
+
+- **File Formats**: JPG, JPEG, PNG, WEBP
+- **File Size**: Maximum 1MB per image
+- **Filename**: Must not contain Chinese characters
+- **Storage**: Images are stored in Supabase Storage and publicly accessible
 
 ### Image Display
 
 - **Primary Image**: Shows on product cards and listings
 - **Gallery**: All images available in product detail view
-- **Order**: Images are displayed in the order they were added
+- **Order**: Images are displayed in the order they were uploaded
 
 ## 🔐 Security Features
 
