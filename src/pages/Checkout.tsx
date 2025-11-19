@@ -68,12 +68,43 @@ export default function Checkout() {
         address: formData.address,
       });
 
-      if (response.data?.url) {
-        window.open(response.data.url, '_blank');
-        toast({
-          title: "Redirecting to payment",
-          description: "Please complete your payment in the new tab",
-        });
+      if (response?.orderId && response?.keyId) {
+        const options = {
+          key: response.keyId,
+          amount: response.amount,
+          currency: response.currency,
+          name: "Ragi Products",
+          description: "Order Payment",
+          order_id: response.orderId,
+          handler: async function (razorpayResponse: any) {
+            try {
+              await api.verifyPayment(
+                razorpayResponse.razorpay_order_id,
+                razorpayResponse.razorpay_payment_id,
+                razorpayResponse.razorpay_signature
+              );
+              clearCart();
+              navigate("/payment-success");
+            } catch (error: any) {
+              toast({
+                title: "Payment verification failed",
+                description: error.message,
+                variant: "destructive",
+              });
+            }
+          },
+          prefill: {
+            name: formData.name,
+            email: formData.email,
+            contact: formData.phone,
+          },
+          theme: {
+            color: "#8B4513",
+          },
+        };
+
+        const razorpay = new (window as any).Razorpay(options);
+        razorpay.open();
       } else {
         throw new Error("Failed to create checkout session");
       }
@@ -81,7 +112,7 @@ export default function Checkout() {
       console.error("Checkout error:", error);
       toast({
         title: "Checkout failed",
-        description: error.message || "Please ensure STRIPE_SECRET_KEY is configured correctly",
+        description: error.message || "Please ensure Razorpay keys are configured correctly",
         variant: "destructive",
       });
     } finally {

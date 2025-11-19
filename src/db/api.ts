@@ -202,12 +202,10 @@ export const api = {
   async createCheckoutSession(items: OrderItem[], customerInfo?: { name?: string; phone?: string; address?: string }) {
     const { data: { session } } = await supabase.auth.getSession();
     
-    const response = await supabase.functions.invoke("create_stripe_checkout", {
+    const response = await supabase.functions.invoke("create_razorpay_order", {
       body: JSON.stringify({
         items,
-        currency: "inr",
-        payment_method_types: ["card"],
-        customer_info: customerInfo,
+        customerInfo,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -223,11 +221,18 @@ export const api = {
     return response.data;
   },
 
-  async verifyPayment(sessionId: string) {
-    const response = await supabase.functions.invoke("verify_stripe_payment", {
-      body: JSON.stringify({ sessionId }),
+  async verifyPayment(razorpay_order_id: string, razorpay_payment_id: string, razorpay_signature: string) {
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    const response = await supabase.functions.invoke("verify_razorpay_payment", {
+      body: JSON.stringify({
+        razorpay_order_id,
+        razorpay_payment_id,
+        razorpay_signature,
+      }),
       headers: {
         "Content-Type": "application/json",
+        ...(session?.access_token && { Authorization: `Bearer ${session.access_token}` }),
       },
     });
 

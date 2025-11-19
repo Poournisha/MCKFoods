@@ -6,13 +6,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Package, RefreshCw } from "lucide-react";
+import { Loader2, Package } from "lucide-react";
 
 export default function Orders() {
   const { user } = useAuth();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState<string | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -36,26 +35,6 @@ export default function Orders() {
       });
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleRefreshOrder = async (sessionId: string, orderId: string) => {
-    setRefreshing(orderId);
-    try {
-      await api.verifyPayment(sessionId);
-      await loadOrders();
-      toast({
-        title: "Order updated",
-        description: "Order status has been refreshed",
-      });
-    } catch (error: any) {
-      toast({
-        title: "Refresh failed",
-        description: error.message,
-        variant: "destructive",
-      });
-    } finally {
-      setRefreshing(null);
     }
   };
 
@@ -111,25 +90,9 @@ export default function Orders() {
                 <CardTitle className="text-lg">
                   Order #{order.id.slice(0, 8)}
                 </CardTitle>
-                <div className="flex items-center gap-2">
-                  <Badge variant={getStatusColor(order.status)}>
-                    {order.status.toUpperCase()}
-                  </Badge>
-                  {order.status === "pending" && order.stripe_session_id && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleRefreshOrder(order.stripe_session_id!, order.id)}
-                      disabled={refreshing === order.id}
-                    >
-                      {refreshing === order.id ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                      ) : (
-                        <RefreshCw className="h-4 w-4" />
-                      )}
-                    </Button>
-                  )}
-                </div>
+                <Badge variant={getStatusColor(order.status)}>
+                  {order.status.toUpperCase()}
+                </Badge>
               </div>
               <p className="text-sm text-muted-foreground">
                 Placed on {new Date(order.created_at).toLocaleDateString("en-IN", {

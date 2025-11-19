@@ -2,7 +2,7 @@
 
 ## 🎉 Your E-commerce Platform is Ready!
 
-This is a fully functional e-commerce website for selling Ragi health food products with integrated payment processing and admin management.
+This is a fully functional e-commerce website for selling Ragi health food products with integrated Razorpay payment processing (perfect for India) and admin management.
 
 ## 📋 What's Included
 
@@ -10,7 +10,7 @@ This is a fully functional e-commerce website for selling Ragi health food produ
 - **Product Catalog**: Browse 7 health food products across 3 categories
 - **Search & Filter**: Find products by name or category
 - **Shopping Cart**: Add, remove, and adjust quantities
-- **Secure Checkout**: Integrated Stripe payment processing
+- **Secure Checkout**: Integrated Razorpay payment processing (UPI, Cards, NetBanking, Wallets)
 - **Order History**: Track all your orders
 - **User Authentication**: Register and login with email/password
 
@@ -22,15 +22,25 @@ This is a fully functional e-commerce website for selling Ragi health food produ
 
 ## 🔧 Configuration Required
 
-### 1. Stripe Payment Setup
+### 1. Razorpay Payment Setup
 
-To enable payment processing, you need to add your Stripe secret key:
+To enable payment processing, you need to add your Razorpay credentials:
 
-1. Get your Stripe secret key from https://dashboard.stripe.com/apikeys
-2. The key should start with `sk_test_` (for testing) or `sk_live_` (for production)
-3. Add it to your Supabase Edge Functions secrets (already configured in the system)
+1. **Get your Razorpay keys** from https://dashboard.razorpay.com/app/keys
+   - Key ID (starts with `rzp_test_` for testing or `rzp_live_` for production)
+   - Key Secret (keep this confidential)
 
-**Note**: The payment system is fully implemented and will work once you add your Stripe key.
+2. **Add to Supabase Edge Functions**:
+   - The system needs two environment variables:
+     - `RAZORPAY_KEY_ID` - Your Razorpay Key ID
+     - `RAZORPAY_KEY_SECRET` - Your Razorpay Key Secret
+
+3. **Testing Payments**:
+   - Use Razorpay test mode credentials for testing
+   - Test cards and UPI IDs are available in Razorpay documentation
+   - All Indian payment methods are supported (UPI, Cards, NetBanking, Wallets)
+
+**Note**: The payment system is fully implemented and will work once you add your Razorpay keys.
 
 ### 2. First Admin Account
 
@@ -47,7 +57,7 @@ Your database is already set up with:
 - **3 Categories**: Ragi-based Products, Dal-based Products, Banana Powder Products
 - **7 Products**: All products with real images and descriptions
 - **User Roles**: Automatic admin assignment for first user
-- **Order Tracking**: Complete order management system
+- **Order Tracking**: Complete order management system with Razorpay integration
 
 ### Initial Data Included
 
@@ -78,7 +88,7 @@ The following products are pre-loaded:
 3. **Filter**: Click category buttons to filter products
 4. **Add to Cart**: Click "Add to Cart" on any product
 5. **Checkout**: Review your cart and proceed to checkout
-6. **Payment**: Complete payment through Stripe (secure and encrypted)
+6. **Payment**: Complete payment through Razorpay (supports UPI, Cards, NetBanking, Wallets)
 7. **Track Orders**: View your order history in "My Orders"
 
 ### For Admins
@@ -93,8 +103,17 @@ The following products are pre-loaded:
 
 - **Secure Authentication**: Email/password authentication with Supabase
 - **Row Level Security**: Database policies protect user data
-- **Payment Security**: Stripe handles all payment processing securely
+- **Payment Security**: Razorpay handles all payment processing securely with signature verification
 - **Admin Protection**: Admin routes are protected and require admin role
+
+## 💳 Payment Methods Supported
+
+Razorpay supports all major Indian payment methods:
+- **UPI**: Google Pay, PhonePe, Paytm, BHIM, and all UPI apps
+- **Cards**: Credit Cards, Debit Cards (Visa, Mastercard, RuPay, Amex)
+- **NetBanking**: All major Indian banks
+- **Wallets**: Paytm, Mobikwik, Freecharge, Airtel Money, JioMoney
+- **EMI**: Cardless EMI and Card EMI options
 
 ## 📱 Responsive Design
 
@@ -110,30 +129,32 @@ The website is fully responsive and optimized for:
 - **Styling**: Tailwind CSS + shadcn/ui
 - **Backend**: Supabase (PostgreSQL database)
 - **Authentication**: Supabase Auth
-- **Payment**: Stripe
+- **Payment**: Razorpay (India's leading payment gateway)
 - **Hosting**: Ready for deployment
 
 ## 📝 Important Notes
 
-1. **Stripe Configuration**: Add your Stripe secret key to enable payments
+1. **Razorpay Configuration**: Add your Razorpay Key ID and Key Secret to enable payments
 2. **First User is Admin**: The first person to register becomes an admin automatically
 3. **Product Images**: All products have real images loaded
 4. **Email Verification**: Currently disabled for easier testing (can be enabled in Supabase settings)
+5. **Currency**: All prices are in Indian Rupees (₹)
 
 ## 🎯 Next Steps
 
 1. Register your admin account (first user)
-2. Add your Stripe secret key for payment processing
+2. Add your Razorpay credentials for payment processing
 3. Customize products through the admin panel
-4. Test the complete shopping flow
+4. Test the complete shopping flow with Razorpay test mode
 5. Deploy to production when ready
 
 ## 💡 Tips
 
-- **Testing Payments**: Use Stripe test card `4242 4242 4242 4242` with any future expiry date
+- **Testing Payments**: Use Razorpay test mode with test credentials
 - **Managing Stock**: Update product stock levels through the admin panel
-- **Order Status**: Orders automatically update to "completed" after successful payment
+- **Order Status**: Orders automatically update to "completed" after successful payment verification
 - **User Roles**: Change user roles through the Users Management page
+- **Payment Verification**: Razorpay signature verification ensures payment authenticity
 
 ## 🆘 Support
 
@@ -142,9 +163,10 @@ If you need to:
 - Customize the design colors
 - Add new features
 - Modify the checkout process
+- Configure additional payment methods
 
 All the code is well-organized and documented for easy customization.
 
 ---
 
-**Your e-commerce platform is ready to start selling! 🎊**
+**Your e-commerce platform is ready to start selling in India! 🎊**
