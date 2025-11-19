@@ -17,7 +17,10 @@ A fully functional e-commerce website for MCK Foods, specializing in premium Rag
 - **CREDENTIALS.md** - Quick reference for admin login
 - **SETUP_GUIDE.md** - Complete setup and configuration guide
 - **ADMIN_SETUP.md** - Detailed admin account setup instructions
-- **GOOGLE_AUTH_SETUP.md** - Google OAuth integration guide
+- **ENABLE_GOOGLE_NOW.md** - ⚡ Fix Google OAuth error (2 minutes)
+- **GOOGLE_QUICK_FIX.md** - Quick Google OAuth setup guide
+- **GOOGLE_AUTH_SETUP.md** - Complete Google OAuth integration guide
+- **GOOGLE_OAUTH_SUMMARY.md** - Google OAuth feature overview
 - **IMAGE_UPLOAD_GUIDE.md** - Image upload feature documentation
 - **CHANGES.md** - Complete changelog of all features
 
@@ -62,11 +65,20 @@ A fully functional e-commerce website for MCK Foods, specializing in premium Rag
 
 ## ⚠️ Common Issues
 
-### "Unsupported provider: provider is not enabled"
-This means Google OAuth isn't enabled yet. Quick fix:
-1. Go to Supabase Dashboard → Authentication → Providers
-2. Enable Google provider
-3. See **GOOGLE_QUICK_FIX.md** for detailed steps
+### ❌ "Unsupported provider: provider is not enabled"
+**Problem**: Google OAuth isn't enabled in Supabase yet.
+
+**Quick Fix** (2 minutes):
+1. Open Supabase Dashboard → Authentication → Providers
+2. Find "Google" and toggle it ON
+3. Click Save
+
+**Detailed Guide**: See **ENABLE_GOOGLE_NOW.md** for step-by-step instructions
+
+### 💡 Need Help?
+- Google OAuth setup: **ENABLE_GOOGLE_NOW.md**
+- Admin access: **CREDENTIALS.md**
+- Full setup: **SETUP_GUIDE.md**
 
 ## Project Info
 
