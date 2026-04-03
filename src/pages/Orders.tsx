@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, Package } from "lucide-react";
+import { formatOrderId } from "@/lib/utils";
 
 export default function Orders() {
   const { user } = useAuth();
@@ -88,7 +89,7 @@ export default function Orders() {
             <CardHeader>
               <div className="flex flex-col gap-2 xl:flex-row xl:items-center xl:justify-between">
                 <CardTitle className="text-lg">
-                  Order #{order.id.slice(0, 8)}
+                  Order {formatOrderId(order.id)}
                 </CardTitle>
                 <Badge variant={getStatusColor(order.status)}>
                   {order.status.toUpperCase()}
@@ -116,6 +117,23 @@ export default function Orders() {
                     </span>
                   </div>
                 ))}
+              </div>
+
+              <div className="pt-2 space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Subtotal</span>
+                  <span className="font-semibold">₹{((order.total_amount - (order.shipping_cost || 0)) / 100).toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">
+                    Shipping Cost {order.total_weight_grams ? `(${order.total_weight_grams}g)` : ''}
+                  </span>
+                  <span className="font-semibold">
+                    {order.shipping_cost && order.shipping_cost > 0 
+                      ? `₹${(order.shipping_cost / 100).toFixed(2)}`
+                      : 'Free'}
+                  </span>
+                </div>
               </div>
 
               <div className="pt-4 border-t">

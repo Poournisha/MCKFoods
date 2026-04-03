@@ -26,12 +26,29 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
-      if (error) throw error;
+      if (error) {
+        // Provide user-friendly error messages
+        let errorMessage = error.message;
+        
+        if (error.message.includes("Invalid login credentials")) {
+          errorMessage = "Invalid email or password. Please check your credentials and try again.";
+        } else if (error.message.includes("Email not confirmed")) {
+          errorMessage = "Please confirm your email address before logging in. Check your inbox for the confirmation link.";
+        } else if (error.message.includes("User not found")) {
+          errorMessage = "No account found with this email. Please sign up first.";
+        }
+        
+        throw new Error(errorMessage);
+      }
+
+      if (!data.user) {
+        throw new Error("Login failed. Please try again.");
+      }
 
       toast({
         title: "Login successful",

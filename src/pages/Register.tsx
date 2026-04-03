@@ -44,7 +44,7 @@ export default function Register() {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -54,18 +54,36 @@ export default function Register() {
         },
       });
 
-      if (error) throw error;
+      if (error) {
+        // Provide user-friendly error messages
+        let errorMessage = error.message;
+        
+        if (error.message.includes("User already registered")) {
+          errorMessage = "An account with this email already exists. Please log in instead.";
+        } else if (error.message.includes("Password should be at least")) {
+          errorMessage = "Password must be at least 6 characters long.";
+        } else if (error.message.includes("Invalid email")) {
+          errorMessage = "Please enter a valid email address.";
+        }
+        
+        throw new Error(errorMessage);
+      }
+
+      if (!data.user) {
+        throw new Error("Registration failed. Please try again.");
+      }
 
       toast({
         title: "Registration successful",
-        description: "Welcome to Ragi Products!",
+        description: "Welcome to Ragi Products! You can now start shopping.",
       });
 
+      // Navigate to home page after successful registration
       navigate("/");
     } catch (error: any) {
       toast({
         title: "Registration failed",
-        description: error.message || "Something went wrong",
+        description: error.message || "Something went wrong. Please try again.",
         variant: "destructive",
       });
     } finally {

@@ -13,9 +13,10 @@ import { useToast } from "@/hooks/use-toast";
 import { Plus, Edit, Trash2, Loader2, X, Star, Image as ImageIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ImageUpload } from "@/components/ui/ImageUpload";
+import AdminLayout from "@/components/admin/AdminLayout";
 
 export default function ProductsManagement() {
-  const { profile } = useAuth();
+  const { profile, loading: authLoading } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
@@ -34,6 +35,7 @@ export default function ProductsManagement() {
     category_id: "",
     image_url: "",
     stock: "100",
+    priority: "999",
     is_active: true,
   });
 
@@ -44,7 +46,7 @@ export default function ProductsManagement() {
   const loadData = async () => {
     try {
       const [productsData, categoriesData] = await Promise.all([
-        api.getProducts(),
+        api.getAllProductsForAdmin(),
         api.getCategories(),
       ]);
       setProducts(productsData);
@@ -77,6 +79,7 @@ export default function ProductsManagement() {
         category_id: formData.category_id || null,
         image_url: formData.image_url || null,
         stock: Number.parseInt(formData.stock),
+        priority: Number.parseInt(formData.priority),
         is_active: formData.is_active,
       };
 
@@ -126,6 +129,7 @@ export default function ProductsManagement() {
       category_id: product.category_id || "",
       image_url: product.image_url || "",
       stock: product.stock.toString(),
+      priority: product.priority.toString(),
       is_active: product.is_active,
     });
     setDialogOpen(true);
@@ -140,6 +144,7 @@ export default function ProductsManagement() {
       category_id: "",
       image_url: "",
       stock: "100",
+      priority: "999",
       is_active: true,
     });
     setEditingProduct(null);
@@ -216,7 +221,17 @@ export default function ProductsManagement() {
     }
   };
 
-  if (profile?.role !== "admin") {
+  // Show loading state while checking authentication
+  if (authLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
+      </div>
+    );
+  }
+
+  // Check admin access after loading is complete
+  if (!profile || profile.role !== "admin") {
     return (
       <div className="container mx-auto px-4 py-16 text-center">
         <h1 className="text-2xl font-bold text-destructive">Access Denied</h1>
@@ -234,7 +249,7 @@ export default function ProductsManagement() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <AdminLayout>
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-primary">Products Management</h1>
         <Dialog open={dialogOpen} onOpenChange={(open) => {
@@ -329,6 +344,22 @@ export default function ProductsManagement() {
               </div>
 
               <div>
+                <Label htmlFor="priority">Display Priority *</Label>
+                <Input
+                  id="priority"
+                  type="number"
+                  min="1"
+                  max="999"
+                  value={formData.priority}
+                  onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
+                  required
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  Lower numbers appear first (1-999)
+                </p>
+              </div>
+
+              <div>
                 <Label htmlFor="image_url">Primary Image URL</Label>
                 <Input
                   id="image_url"
@@ -349,7 +380,7 @@ export default function ProductsManagement() {
                   onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
                   className="h-4 w-4"
                 />
-                <Label htmlFor="is_active">Active (visible to customers)</Label>
+                <Label htmlFor="is_active">Available (visible to customers)</Label>
               </div>
 
               <div className="flex gap-2 justify-end">
@@ -371,9 +402,9 @@ export default function ProductsManagement() {
             <CardHeader>
               <div className="flex items-start justify-between">
                 <CardTitle className="text-lg">{product.name}</CardTitle>
-                <Badge variant={product.is_active ? "default" : "secondary"}>
-                  {product.is_active ? "Active" : "Inactive"}
-                </Badge>
+                {product.is_active && (
+                  <Badge variant="default">Available</Badge>
+                )}
               </div>
             </CardHeader>
             <CardContent>
@@ -389,6 +420,7 @@ export default function ProductsManagement() {
                 <p className="font-semibold text-lg text-primary">₹{product.price}</p>
                 <p className="text-muted-foreground">Stock: {product.stock}</p>
                 {product.weight && <p className="text-muted-foreground">Weight: {product.weight}</p>}
+                <p className="text-muted-foreground">Priority: {product.priority}</p>
               </div>
             </CardContent>
             <CardFooter className="flex gap-2">
@@ -416,56 +448,138 @@ export default function ProductsManagement() {
           </DialogHeader>
 
           <div className="space-y-6">
-            <div className="space-y-2">
-              <Label>Upload New Image</Label>
-              <ImageUpload onUpload={handleAddImage} />
+            {/* Upload Section */}
+            <div className="space-y-3">
+              <Label className="text-base font-semibold">Upload New Image</Label>
+              <div className="border-2 border-dashed border-border rounded-lg p-8 hover:border-primary transition-colors">
+                <ImageUpload onUpload={handleAddImage} />
+                <p className="text-xs text-muted-foreground text-center mt-2">
+                  Supports: JPG, PNG, WEBP (Max 1MB)
+                </p>
+              </div>
             </div>
 
-            <div>
-              <Label className="mb-4 block">Product Images ({productImages.length})</Label>
+            {/* Images Grid */}
+            <div className="space-y-3">
+              <Label className="text-base font-semibold">
+                Product Images ({productImages.length})
+              </Label>
+              
               {productImages.length === 0 ? (
-                <p className="text-muted-foreground text-center py-8">No images added yet</p>
+                <div className="text-center py-12 bg-muted/30 rounded-lg">
+                  <ImageIcon className="h-12 w-12 mx-auto text-muted-foreground mb-3" />
+                  <p className="text-muted-foreground font-medium">No images added yet</p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Upload your first product image above
+                  </p>
+                </div>
               ) : (
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {productImages.map((image) => (
-                    <div key={image.id} className="relative group">
-                      <img
-                        src={image.image_url}
-                        alt="Product"
-                        className="w-full h-48 object-cover rounded-md"
-                      />
-                      {image.is_primary && (
-                        <Badge className="absolute top-2 left-2">
-                          <Star className="h-3 w-3 mr-1" />
-                          Primary
-                        </Badge>
-                      )}
-                      <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        {!image.is_primary && (
-                          <Button
-                            size="sm"
-                            variant="secondary"
-                            onClick={() => handleSetPrimaryImage(image.id)}
-                          >
-                            <Star className="h-3 w-3" />
-                          </Button>
-                        )}
-                        <Button
-                          size="sm"
-                          variant="destructive"
-                          onClick={() => handleDeleteImage(image.id)}
-                        >
-                          <X className="h-3 w-3" />
-                        </Button>
+                <div className="space-y-4">
+                  {/* Instructions */}
+                  <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
+                    <div className="flex gap-2 text-sm text-blue-900 dark:text-blue-100">
+                      <ImageIcon className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                      <div className="space-y-1">
+                        <p className="font-medium">Image Management Tips:</p>
+                        <ul className="list-disc list-inside space-y-0.5 text-xs text-blue-800 dark:text-blue-200">
+                          <li>Click the star icon to set an image as primary</li>
+                          <li>Primary image appears first in the product gallery</li>
+                          <li>Drag images to reorder them (coming soon)</li>
+                          <li>Click the X icon to delete an image</li>
+                        </ul>
                       </div>
                     </div>
-                  ))}
+                  </div>
+
+                  {/* Images Grid */}
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {productImages
+                      .sort((a, b) => a.display_order - b.display_order)
+                      .map((image, index) => (
+                        <div
+                          key={image.id}
+                          className="relative group border-2 rounded-lg overflow-hidden hover:border-primary transition-all"
+                          style={{
+                            borderColor: image.is_primary ? "hsl(var(--primary))" : "hsl(var(--border))",
+                          }}
+                        >
+                          {/* Image */}
+                          <div className="aspect-square bg-muted">
+                            <img
+                              src={image.image_url}
+                              alt={`Product image ${index + 1}`}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+
+                          {/* Primary Badge */}
+                          {image.is_primary && (
+                            <Badge className="absolute top-2 left-2 bg-primary text-primary-foreground shadow-lg">
+                              <Star className="h-3 w-3 mr-1 fill-current" />
+                              Primary
+                            </Badge>
+                          )}
+
+                          {/* Display Order Badge */}
+                          <Badge
+                            variant="secondary"
+                            className="absolute bottom-2 left-2 bg-black/60 text-white border-0"
+                          >
+                            #{index + 1}
+                          </Badge>
+
+                          {/* Action Buttons */}
+                          <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            {!image.is_primary && (
+                              <Button
+                                size="sm"
+                                variant="secondary"
+                                className="h-8 w-8 p-0 shadow-lg"
+                                onClick={() => handleSetPrimaryImage(image.id)}
+                                title="Set as primary image"
+                              >
+                                <Star className="h-4 w-4" />
+                              </Button>
+                            )}
+                            <Button
+                              size="sm"
+                              variant="destructive"
+                              className="h-8 w-8 p-0 shadow-lg"
+                              onClick={() => handleDeleteImage(image.id)}
+                              title="Delete image"
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          </div>
+
+                          {/* Hover Overlay */}
+                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors pointer-events-none" />
+                        </div>
+                      ))}
+                  </div>
+
+                  {/* Summary */}
+                  <div className="flex items-center justify-between text-sm text-muted-foreground pt-2 border-t">
+                    <span>Total images: {productImages.length}</span>
+                    <span>
+                      Primary: {productImages.find((img) => img.is_primary)?.display_order !== undefined
+                        ? `#${productImages.find((img) => img.is_primary)!.display_order + 1}`
+                        : "None"}
+                    </span>
+                  </div>
                 </div>
               )}
             </div>
           </div>
+
+          {/* Footer */}
+          <div className="flex justify-end pt-4 border-t">
+            <Button onClick={() => setImageDialogOpen(false)}>
+              Done
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
-    </div>
+    </AdminLayout>
   );
 }

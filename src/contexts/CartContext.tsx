@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, useRef, type ReactNode } from "react";
 import type { CartItem, Product } from "@/types/types";
 
 interface CartContextType {
@@ -20,23 +20,44 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const stored = localStorage.getItem(CART_STORAGE_KEY);
     return stored ? JSON.parse(stored) : [];
   });
+  
+  // Add a ref to track ongoing operations and prevent race conditions
+  const isProcessing = useRef(false);
 
   useEffect(() => {
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
   }, [cart]);
 
   const addToCart = (product: Product, quantity = 1) => {
+    // Prevent concurrent operations
+    if (isProcessing.current) {
+      console.log("Cart operation already in progress, skipping...");
+      return;
+    }
+    
+    isProcessing.current = true;
+    
+    // Ensure quantity is a valid positive integer
+    const validQuantity = Math.max(1, Math.floor(quantity));
+    
     setCart((prev) => {
       const existing = prev.find((item) => item.id === product.id);
       if (existing) {
+        // Product exists, add to existing quantity
         return prev.map((item) =>
           item.id === product.id
-            ? { ...item, quantity: Math.min(item.quantity + quantity, item.stock) }
+            ? { ...item, quantity: Math.min(item.quantity + validQuantity, item.stock) }
             : item
         );
       }
-      return [...prev, { ...product, quantity: Math.min(quantity, product.stock) }];
+      // New product, add to cart
+      return [...prev, { ...product, quantity: Math.min(validQuantity, product.stock) }];
     });
+    
+    // Reset processing flag after a short delay
+    setTimeout(() => {
+      isProcessing.current = false;
+    }, 300);
   };
 
   const removeFromCart = (productId: string) => {

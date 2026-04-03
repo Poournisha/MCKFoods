@@ -1,33 +1,61 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { api } from "@/db/api";
-import type { Product } from "@/types/types";
+import type { Product, ProductImage } from "@/types/types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, ShoppingCart, Loader2, Minus, Plus } from "lucide-react";
+import { ArrowLeft, ShoppingCart, Loader2, Minus, Plus, Heart } from "lucide-react";
+import ProductImageCarousel from "@/components/product/ProductImageCarousel";
+import { ProductReviews } from "@/components/product/ProductReviews";
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [product, setProduct] = useState<Product | null>(null);
+  const [productImages, setProductImages] = useState<ProductImage[]>([]);
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [isInWishlist, setIsInWishlist] = useState(false);
   const { addToCart } = useCart();
   const { toast } = useToast();
 
   useEffect(() => {
     if (id) {
       loadProduct(id);
+      checkWishlistStatus(id);
     }
   }, [id]);
 
+  const checkWishlistStatus = (productId: string) => {
+    const stored = localStorage.getItem("wishlist");
+    if (stored) {
+      try {
+        const items = JSON.parse(stored);
+        setIsInWishlist(items.some((item: Product) => item.id === productId));
+      } catch {
+        setIsInWishlist(false);
+      }
+    }
+  };
+
   const loadProduct = async (productId: string) => {
+    console.log("=== LOADING PRODUCT ===");
+    console.log("Product ID from URL:", productId);
+    
     try {
-      const data = await api.getProductById(productId);
-      setProduct(data);
+      const [productData, imagesData] = await Promise.all([
+        api.getProductById(productId),
+        api.getProductImages(productId),
+      ]);
+      
+      console.log("Product data received:", productData);
+      console.log("Product images received:", imagesData);
+      
+      setProduct(productData);
+      setProductImages(imagesData);
     } catch (error) {
       console.error("Failed to load product:", error);
       toast({
@@ -40,23 +68,70 @@ export default function ProductDetail() {
     }
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (product) {
       addToCart(product, quantity);
       toast({
         title: "Added to cart",
         description: `${quantity} × ${product.name} added to your cart`,
       });
+
+      // Scroll to top after adding to cart
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "smooth",
+      });
     }
   };
 
-  const incrementQuantity = () => {
+  const handleToggleWishlist = () => {
+    if (!product) return;
+
+    const stored = localStorage.getItem("wishlist");
+    let wishlist: Product[] = [];
+    
+    if (stored) {
+      try {
+        wishlist = JSON.parse(stored);
+      } catch {
+        wishlist = [];
+      }
+    }
+
+    if (isInWishlist) {
+      wishlist = wishlist.filter((item) => item.id !== product.id);
+      setIsInWishlist(false);
+      toast({
+        title: "Removed from Wishlist",
+        description: `${product.name} has been removed from your wishlist`,
+      });
+    } else {
+      wishlist.push(product);
+      setIsInWishlist(true);
+      toast({
+        title: "Added to Wishlist",
+        description: `${product.name} has been added to your wishlist`,
+      });
+    }
+
+    localStorage.setItem("wishlist", JSON.stringify(wishlist));
+    window.dispatchEvent(new Event("wishlist-updated"));
+  };
+
+  const incrementQuantity = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (product && quantity < product.stock) {
       setQuantity(quantity + 1);
     }
   };
 
-  const decrementQuantity = () => {
+  const decrementQuantity = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (quantity > 1) {
       setQuantity(quantity - 1);
     }
@@ -86,25 +161,30 @@ export default function ProductDetail() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <Button variant="ghost" onClick={() => navigate("/")} className="mb-6">
+      <Button variant="ghost" onClick={() => navigate("/")} className="mb-6 transition-smooth hover-lift animate-fade-in-left">
         <ArrowLeft className="h-4 w-4 mr-2" />
         Back to Products
       </Button>
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-        <Card>
+        <Card className="animate-fade-in-left">
           <CardContent className="p-6">
-            <div className="aspect-square bg-muted rounded-lg overflow-hidden">
-              <img
-                src={product.image_url || "/placeholder-product.jpg"}
-                alt={product.name}
-                className="w-full h-full object-cover"
-              />
-            </div>
+            <ProductImageCarousel
+              images={
+                productImages.length > 0
+                  ? productImages
+                      .sort((a, b) => a.display_order - b.display_order)
+                      .map((img) => img.image_url)
+                  : product.image_url
+                  ? [product.image_url]
+                  : []
+              }
+              productName={product.name}
+            />
           </CardContent>
         </Card>
 
-        <div className="space-y-6">
+        <div className="space-y-6 animate-fade-in-right">
           <div>
             <h1 className="text-3xl font-bold text-primary mb-2">{product.name}</h1>
             {product.weight && (
@@ -131,7 +211,7 @@ export default function ProductDetail() {
             </p>
           </div>
 
-          <Card>
+          <Card className="hover-lift transition-smooth">
             <CardContent className="p-6 space-y-4">
               <div className="flex items-center gap-4">
                 <span className="font-medium">Quantity:</span>
@@ -141,6 +221,7 @@ export default function ProductDetail() {
                     size="icon"
                     onClick={decrementQuantity}
                     disabled={quantity <= 1}
+                    className="transition-smooth hover-scale"
                   >
                     <Minus className="h-4 w-4" />
                   </Button>
@@ -150,6 +231,7 @@ export default function ProductDetail() {
                     size="icon"
                     onClick={incrementQuantity}
                     disabled={quantity >= product.stock}
+                    className="transition-smooth hover-scale"
                   >
                     <Plus className="h-4 w-4" />
                   </Button>
@@ -163,18 +245,35 @@ export default function ProductDetail() {
                 </span>
               </div>
 
-              <Button
-                onClick={handleAddToCart}
-                disabled={product.stock === 0}
-                className="w-full"
-                size="lg"
-              >
-                <ShoppingCart className="h-5 w-5 mr-2" />
-                Add to Cart
-              </Button>
+              <div className="space-y-3">
+                <Button
+                  onClick={handleAddToCart}
+                  disabled={product.stock === 0}
+                  className="w-full transition-smooth hover-lift"
+                  size="lg"
+                >
+                  <ShoppingCart className="h-5 w-5 mr-2" />
+                  Add to Cart
+                </Button>
+
+                <Button
+                  onClick={handleToggleWishlist}
+                  variant={isInWishlist ? "default" : "outline"}
+                  className="w-full transition-smooth hover-lift"
+                  size="lg"
+                >
+                  <Heart className={`h-5 w-5 mr-2 transition-smooth ${isInWishlist ? "fill-current" : ""}`} />
+                  {isInWishlist ? "Remove from Wishlist" : "Add to Wishlist"}
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </div>
+      </div>
+
+      {/* Product Reviews Section */}
+      <div className="mt-12">
+        <ProductReviews productId={product.id} />
       </div>
     </div>
   );

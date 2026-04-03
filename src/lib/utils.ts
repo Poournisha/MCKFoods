@@ -37,3 +37,7 @@ export function formatDate(
     ...opts,
   }).format(new Date(date));
 }
+
+export function formatOrderId(orderId: string): string {
+  return `#${orderId.substring(0, 8)}`;
+}
